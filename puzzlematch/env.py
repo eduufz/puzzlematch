@@ -1,7 +1,7 @@
 import os
 
 class App:
-    name = 'PuzzleHack'
+    name = 'PuzzleMatch'
     description = 'Puzzle building tools with computer vision'
     version = 'v0.1'
 

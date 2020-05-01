@@ -57,6 +57,52 @@ class Draw:
 
         return image_
 
+    @classmethod
+    def crosshair(cls, image, center, size, cross_size=10, corner_size=10):
+        image_ = image.copy()
+
+        x, y = center
+        size = size//2
+        cross_size = cross_size//2
+
+        lines = [
+            # cross
+            [
+                (x,y-cross_size),
+                (x,y+cross_size)
+            ],
+            [
+                (x-cross_size,y),
+                (x+cross_size,y)
+            ],
+            # corners
+            [
+                (x-size, y-size+corner_size),
+                (x-size, y-size),
+                (x-size+corner_size, y-size)
+            ],
+            [
+                (x+size, y-size+corner_size),
+                (x+size, y-size),
+                (x+size-corner_size, y-size)
+            ],
+            [
+                (x-size, y+size-corner_size),
+                (x-size, y+size),
+                (x-size+corner_size, y+size)
+            ],
+            [
+                (x+size, y+size-corner_size),
+                (x+size, y+size),
+                (x+size-corner_size, y+size)
+            ]
+        ]
+
+        for line in lines:
+            image_ = cls.lines(image_, line, color=(0,255,0), thickness=1, fade=False)
+        
+        return image_
+
 class Processor:
     @staticmethod
     def scale(image, scale):
