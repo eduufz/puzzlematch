@@ -1,8 +1,10 @@
 import cv2
+import numpy as np
+
 
 class Draw:
-    @staticmethod
-    def rectangle(image, p1, p2=None, dims=None, color=(0,255,0), thickness=0):
+    @classmethod
+    def rectangle(cls, image, p1, p2=None, dims=None, color=(0,255,0), thickness=0):
         image_ = image.copy()
 
         if p2 is None and dims is None:
@@ -16,8 +18,8 @@ class Draw:
 
         return image_
 
-    @staticmethod
-    def text(image, text, alignment, size=1, color=(255,255,255), bgcolor=(0,0,0), thickness=1):
+    @classmethod
+    def text(cls, image, text, alignment, size=1, color=(255,255,255), bgcolor=(0,0,0), thickness=1):
         image_ = image.copy()
 
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -39,13 +41,13 @@ class Draw:
 
         x,y = locations[alignment]
         if bgcolor != -1:
-            image_ = rectangle(image_, (x-2,y-text_h-2), p2=None, dims=(text_w+5,text_h+5), color=bgcolor, thickness=-1)
+            image_ = cls.rectangle(image_, p1=(x-2,y-text_h-2), p2=None, dims=(text_w+5,text_h+5), color=bgcolor, thickness=-1)
         image_ = cv2.putText(image_, text, (x,y), font, size, color, thickness)
 
         return image_
 
-    @staticmethod
-    def lines(image, points, color=(0,255,0), thickness=5, fade=False):
+    @classmethod
+    def lines(cls, image, points, color=(0,255,0), thickness=5, fade=False):
         image_ = image.copy()
 
         for i in range(1,len(points)):
@@ -103,6 +105,7 @@ class Draw:
         
         return image_
 
+
 class Processor:
     @staticmethod
     def scale(image, scale):
@@ -139,6 +142,17 @@ class Processor:
         edged = cv2.Canny(gray, 30, 200)
 
         return edged
+
+    @staticmethod
+    def kmeans(image, k):
+        k = (k if k>0 else 1)
+        Z = np.float32(image.reshape((-1,3)))
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+        ret, label, center = cv2.kmeans(Z, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+        clusters = np.uint8(center)[label.flatten()]
+        image = clusters.reshape((image.shape))
+
+        return image
 
     @staticmethod
     def gray(image):

@@ -1,14 +1,18 @@
 import numpy as np
 
 def mask_bbox(img):
-    rows = np.any(img, axis=1)
-    cols = np.any(img, axis=0)
-    ymin, ymax = np.where(rows)[0][[0, -1]]
-    xmin, xmax = np.where(cols)[0][[0, -1]]
+    try:
+        rows = np.any(img, axis=1)
+        cols = np.any(img, axis=0)
+        ymin, ymax = np.where(rows)[0][[0, -1]]
+        xmin, xmax = np.where(cols)[0][[0, -1]]
 
-    w,h = xmax-xmin, ymax-ymin
+        w,h = xmax-xmin, ymax-ymin
 
-    return xmin,ymin,w,h
+        return xmin,ymin,w,h
+
+    except:
+        return None
 
 def same_length_ids(n):
     nlen = len(str(n))

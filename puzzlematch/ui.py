@@ -2,17 +2,18 @@ import cv2
 
 from puzzlematch.processing import Processor
 
-def display(image, scale=1.0, name='image', wait=0, destroy=27, callback=None):
-    if scale!=1.0:
-        image = Processor.scale(image, scale)
+def display(images, scale=1.0, wait=0, destroy=27):
+    if type(images) != list:
+        images = [images]
 
-    if callback is not None:
-        cv2.setMouseCallback(name, callback)
+    for i,image in enumerate(images):
+        if scale!=1.0:
+            image = Processor.scale(image, scale)
 
-    cv2.imshow(name, image)
+        cv2.imshow('window{}'.format(i), image)
+    
     key = cv2.waitKey(wait)
-
     if key==destroy:
-        cv2.destroyWindow(name)
+        cv2.destroyAllWindows()
 
     return key
