@@ -60,7 +60,7 @@ class Draw:
         return image_
 
     @classmethod
-    def crosshair(cls, image, center, size, cross_size=10, corner_size=10):
+    def crosshair(cls, image, center, size, cross_size=10, corner_size=10, color=(0,255,0), thickness=1):
         image_ = image.copy()
 
         x, y = center
@@ -101,7 +101,7 @@ class Draw:
         ]
 
         for line in lines:
-            image_ = cls.lines(image_, line, color=(0,255,0), thickness=1, fade=False)
+            image_ = cls.lines(image_, line, color=color, thickness=thickness, fade=False)
         
         return image_
 
@@ -161,3 +161,15 @@ class Processor:
     @staticmethod
     def hsv(image):
         return cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    @staticmethod
+    def rotate(image, angle, center=None, scale=1):
+        w,h = image.shape[1], image.shape[0]
+
+        if center is None:
+            center = (w//2, h//2)
+
+        M = cv2.getRotationMatrix2D(center, angle, scale)
+        image = cv2.warpAffine(image, M, (w,h))
+
+        return image
