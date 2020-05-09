@@ -33,3 +33,17 @@ def compute_grid(loc, size, offset=(0,0)):
             grid.append((xx,yy,w,h))
             
     return grid
+
+def grid(dims, size):
+    w,h = dims
+    grid_w, grid_h = size
+    cell_w, cell_h = w/grid_w, h/grid_h
+    grid = []
+
+    for row in range(hh):
+        for col in range(ww):
+            xx = cell_w*col
+            yy = cell_h*row
+            grid.append((xx,yy,w,h))
+
+    return grid
